@@ -47,7 +47,15 @@ class MqttConnector:
         self.client.connect(self.broker, int(self.port))
 
     def on_connect(self, client, userdata, flags, response_code):       # pylint:disable=unused-argument
-        """! Callback on client connect """
+        """! Callback on client connect 
+        
+        @param client The client object
+        @param userdata Data on the user
+        @param flags Flags!
+        @param response_code Response code from the server
+
+        @return None
+        """
         if response_code == 0:
             logging.debug("Connected to MQTT broker!")
             self.connected = True
@@ -55,7 +63,14 @@ class MqttConnector:
             logging.debug("Failed to connect, return code %s", response_code)
 
     def on_message(self, client, userdata, message):                    # pylint:disable=unused-argument
-        """! Callback on message received """
+        """! Callback on message received 
+        
+        @param client The client object
+        @param userdata Data on the user
+        @param message Object representing the message that has been received
+
+        @return None
+        """
         outermessage = json.loads(message.payload.decode("utf-8"))
         try:
             payload = outermessage['payload']
@@ -68,11 +83,22 @@ class MqttConnector:
 
 
     def send_message(self, topic, payload):
-        """! Helper function to send a message """
+        """! Helper function to send a message 
+        
+        @param topic The topic to which to send a message
+        @param payload The payload to send in the message
+
+        @return None
+        """
         self.client.publish(topic, self.prep_payload(payload))
 
     def prep_payload(self, data):
-        """! Helper function to prepare the wrapper for the message"""
+        """! Helper function to prepare the wrapper for the message
+        
+        @param data The data to wrap within the envelope
+
+        @return The wrapped message
+        """
         payload = {
             "username": "system",
             "source": "audioplayer",
